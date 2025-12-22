@@ -24,7 +24,6 @@ TREE CreateTree(vector<int> pre, vector<int> in, int preB, int preE, int inB, in
 	} return root;
 }
 
-
 bool isBST(TREE);
 
 int main() {

@@ -29,54 +29,33 @@ void Input(vector<int> &v)
 {
 	int tmp;
 	cin >> tmp;
-	while (tmp > 0) {
+	while (tmp > -1) {
 		v.push_back(tmp);
 		cin >> tmp;
 	}
 }
 
-int MaxLevel(TREE);
+int SumLeaf(TREE);
 
 int main() {
     vector<int> nlr, lnr;
-    int n, key, m, lvl;
 
     Input(nlr);
     Input(lnr);
 
-
     TREE r = CreateTree(nlr, lnr, 0, nlr.size()-1, 0, lnr.size()-1);
 
-    cout << MaxLevel(r) << endl;
+    cout << SumLeaf(r) << endl;
 
     return 0;
 }
 
-void Bfs(TREE root, int level, vector<vector<int>>& value) {
+int SumLeaf(TREE root) {
     if (!root) {
-        return;
+        return 0;
     }
-    if (value.size() <= level) {
-        value.push_back({});
+    if (!root->left && !root->right) {
+        return root->key;
     }
-    value[level].push_back(root->key);
-    Bfs(root->left, level + 1, value);
-    Bfs(root->right, level + 1, value);
-} 
-
-int MaxLevel(TREE root) {
-    vector<vector<int>> value;
-    Bfs(root, 0, value);
-    int Max = 0, Index = 0;
-    for (int i = 0; i < value.size(); i++) {
-        int Sum = 0;
-        for (int j = 0; j < value[i].size(); j++) {
-            Sum += value[i][j];   
-        }
-        if (Sum > Max) {
-            Max = Sum;
-            Index = i;
-        }
-    }
-    return Index;
+    return SumLeaf(root->left) + SumLeaf(root->right);
 }
