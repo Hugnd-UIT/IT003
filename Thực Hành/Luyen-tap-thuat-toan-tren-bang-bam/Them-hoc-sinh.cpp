@@ -83,13 +83,13 @@ int Insert(Hashtable &ht, Hocsinh x) {
         return 0;
     }
     int i = 0;
-    int k = x.Maso % ht.M;
-    int j = k;
-    int temp = -1;
+    int emp = -1;
+    int del = -1;
     do {
+        int j = (x.Maso % ht.M + i) % ht.M;
         if (ht.table[j].Maso == EMPTY) {
-            if (temp != -1) {
-                ht.table[temp] = x;
+            if (del != -1) {
+                ht.table[del] = x;
                 ht.n++;
                 return 1;
             } else {
@@ -98,17 +98,14 @@ int Insert(Hashtable &ht, Hocsinh x) {
                 return 1;
             }
         } else if (ht.table[j].Maso == DELETE) {
-            if (temp == -1) {
-                temp = j;
-            }
-        }else if (ht.table[j].Maso == x.Maso) {
-            return 0;
+            i++;
+            del = j;
+        } else {
+            i++;
         }
-        i++;
-        j = (k + i) % ht.M;
     } while (i < ht.M);
-    if (temp != -1) {
-        ht.table[temp] = x;
+    if (del != -1) {
+        ht.table[del] = x;
         ht.n++;
         return 1;
     }
