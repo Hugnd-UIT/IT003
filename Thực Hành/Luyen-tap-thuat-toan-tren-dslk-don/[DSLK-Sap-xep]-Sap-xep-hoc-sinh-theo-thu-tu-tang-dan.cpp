@@ -142,65 +142,60 @@ int Compare(Hocsinh Hs1, Hocsinh Hs2) {
     }
 }
 
-void Concat(List& l, List& front, List& back) {
-    if (l.head == NULL || l.head->next == NULL) {
-        front.head = l.head;
-        back.head = NULL;
+void Split(Node* head, Node* &left, Node* &right) {
+    if (!head || !head->next) {
+        left = head;
+        right = NULL;
         return;
     }
-    Node* slow = l.head;
-    Node* fast = l.head->next;
-    while (fast != NULL) {
-        fast = fast->next;
-        if (fast != nullptr) {
-            slow = slow->next;
-            fast = fast->next;
-        }
+
+    Node* slow = head;
+    Node* fast = head->next;
+
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
     }
-    front.head = l.head;
-    front.tail = slow;
 
-    back.head = slow->next;
-    back.tail = l.tail;
-
-    slow->next = nullptr;
+    left = head;
+    right = slow->next;
+    slow->next = NULL;
 }
 
-List Merge(List& a, List& b) {
-    List result;
-    Node dummy;  
-    Node* tail = &dummy;
-    dummy.next = nullptr;
-    Node* pa = a.head;
-    Node* pb = b.head;
-    while (pa && pb) {
-        if (Compare(pa->data, pb->data) == -1 || Compare(pa->data, pb->data) == 0) {
-            tail->next = pa;
-            pa = pa->next;
-        } else {
-            tail->next = pb;
-            pb = pb->next;
-        }
-        tail = tail->next;
+
+Node* Merge(Node* a, Node* b) {
+    if (!a) return b;
+    if (!b) return a;
+
+    if (Compare(a->data, b->data) <= 0) {
+        a->next = Merge(a->next, b);
+        return a;
+    } else {
+        b->next = Merge(a, b->next);
+        return b;
     }
-    tail->next = (pa ? pa : pb);
-    result.head = dummy.next;
-    Node* t = result.head;
-    if (t == nullptr)
-        result.tail = nullptr;
-    else {
-        while (t->next != nullptr) t = t->next;
-        result.tail = t;
-    }
-    return result;
+}
+
+Node* MergeSort(Node* head) {
+    if (!head || !head->next)
+        return head;
+
+    Node* left;
+    Node* right;
+
+    Split(head, left, right);
+
+    left = MergeSort(left);
+    right = MergeSort(right);
+
+    return Merge(left, right);
 }
 
 void Sort(List& l) {
-    if (l.head == nullptr || l.head->next == nullptr)
-        return;
-    List front, back;
-    Concat(l, front, back);
-    Sort(front);
-    Sort(back);
-    l = Merge(front, back);
+    l.head = MergeSort(l.head);
+    l.tail = l.head;
+    if (l.tail) {
+        while (l.tail->next)
+            l.tail = l.tail->next;
+    }
 }
