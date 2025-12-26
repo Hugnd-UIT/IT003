@@ -162,7 +162,6 @@ void Split(Node* head, Node* &left, Node* &right) {
     slow->next = NULL;
 }
 
-
 Node* Merge(Node* a, Node* b) {
     if (!a) return b;
     if (!b) return a;
