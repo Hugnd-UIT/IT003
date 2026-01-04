@@ -42,8 +42,7 @@ int main()
 }
 
 int SelectionSort(Hocsinh ls[], int n) {
-
-int min, step = 0;
+    int min, step = 0;
     for (int i = 0; i < n - 1; i++) {
         min = i;
         for (int j = i + 1; j < n; j++) {
