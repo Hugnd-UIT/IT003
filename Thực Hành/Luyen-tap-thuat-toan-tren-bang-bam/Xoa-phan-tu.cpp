@@ -91,19 +91,18 @@ void DeleteHashtable(Hashtable &ht) {
 }
 
 int Delete(Hashtable &ht, int maso, int &nprob) {
+    nprob = 0;
     int i = 0;
     int j = 0;
-    nprob = 0;
     do {
-        j = (maso % ht.M + i * i) % ht.M;;
+        j = ((maso % ht.M) + i * i) % ht.M;
         if (ht.table[j].Maso == maso) {
             ht.n--;
-            ht.table[j].Maso = -1;
+            ht.table[j].Maso = DELETE;
             return 1;
-        } else {
-            nprob++;
-            i++;
         }
-    } while(i < ht.M);
+        i++;
+        nprob++;
+    } while (i < ht.M);
     return 0;
 }
