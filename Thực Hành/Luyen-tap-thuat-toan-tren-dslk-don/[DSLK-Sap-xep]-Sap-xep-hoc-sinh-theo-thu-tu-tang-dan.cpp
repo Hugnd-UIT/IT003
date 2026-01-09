@@ -80,6 +80,19 @@ Node * RemoveHead(List &l) {
     return p;
 }
 
+Node* Reverse(Node* head) {
+    Node* prev = NULL;
+    Node* curr = head;
+
+    while (curr != NULL) {
+        Node* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+
 void PrintList(List l) {
     Node * p = l.head;
     while (p != NULL) {
